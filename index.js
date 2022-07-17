@@ -15,6 +15,7 @@ webSocketserver.on('connection',( client )=>{
     })
 })
 
+//Send message function
 const sendMessage = ( msg ) => {
     for(const client of webSocketserver.clients){
         if(client.readyState === ws.OPEN){
