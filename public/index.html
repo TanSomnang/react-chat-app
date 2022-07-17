@@ -42,12 +42,20 @@
 
         webSocket.onmessage = function(message){
             const msgDiv=document.createElement('div');
+            const img=document.createElement("img");
+
             msgDiv.classList.add('msgCtn');
+            img.className = "col-2";
+            img.src = "user-profile.svg";
+            img.style.background = "rgb(9, 145, 191)";
+            img.className = "col-2 msgPic rounded-circle z-depth-2";
             if (message.data instanceof Blob) {
                 reader = new FileReader();
                 reader.onload = () => {
-                    msgDiv.innerHTML = reader.result;
+                    msgDiv.innerHTML = JSON.parse(reader.result).message;
+                    img.title = JSON.parse(reader.result).username;
                     document.getElementById('messages').appendChild(msgDiv);
+                    document.getElementById('messages').appendChild(img);
                 };
                 reader.readAsText(message.data);
             } else {
@@ -62,7 +70,7 @@
         form.addEventListener('submit',(event) => {
             event.preventDefault();
             const message=document.getElementById('inputBox').value;
-            webSocket.send(message);
+            webSocket.send(JSON.stringify({message: message, username: username}));
             document.getElementById('inputBox').value=''
         })
     </script>
