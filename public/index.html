@@ -25,7 +25,7 @@
                 </div>
                 <div class="card-footer" style="background: #6c757d40">
                     <form id="msgForm" class="msgForm">
-                        <input type="text" placeholder="Message" class="col-8 input form-control" id="inputBox"/>
+                        <input type="text" autofocus placeholder="Message" class="col-8 input form-control" id="inputBox"/>
                         <input type="submit" class="col-3 ml-5 btn btn-primary form-control" value="Send">
                     </form>
                 </div>
@@ -50,10 +50,11 @@
 
             webSocket.onmessage = function(message){
 
-                const dFlexDiv=document.createElement("div");
-                const msgDiv=document.createElement("div");
-                const emptyDiv=document.createElement("div");
-                const img=document.createElement("img");
+                const dFlexDiv = document.createElement("div");
+                const msgDiv = document.createElement("div");
+                const emptyDiv = document.createElement("div");
+                const scrollDiv = document.createElement("div");
+                const img = document.createElement("img");
 
                 if (message.data instanceof Blob) {
                     reader = new FileReader();
@@ -61,6 +62,7 @@
                         if(JSON.parse(reader.result).uuid === uuid){
                             if(msgDiv != undefined){
                                 dFlexDiv.className = "d-flex";
+                                scrollDiv.className = "scroll-end";
                                 msgDiv.className = "col-8 msgCtn";
                                 emptyDiv.className = "col-2";
                                 img.src = "user-profile.svg";
@@ -80,8 +82,12 @@
 
                             const selector = document.querySelectorAll(".messages");
                             selector[selector.length - 1].appendChild(dFlexDiv);
+                            selector[selector.length - 1].appendChild(scrollDiv);
 
-                            const dFlex = document.getElementsByClassName("d-flex")
+                            const scrollToEnd = document.getElementsByClassName("scroll-end");
+                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+
+                            const dFlex = document.getElementsByClassName("d-flex");
                             dFlex[dFlex.length - 1].appendChild(emptyDiv);
                             dFlex[dFlex.length - 1].appendChild(msgDiv);
                             dFlex[dFlex.length - 1].appendChild(img);
