@@ -25,6 +25,10 @@
         </div>
     </body>
     <script type="text/javascript">
+        const username = prompt("Please enter your username");
+        const name = document.getElementById("name");
+        name.innerHTML += username;
+
         const webSocket=new WebSocket(`ws://${window.document.location.host}`);
         webSocket.binaryType = "blob";
 
