@@ -1,0 +1,15 @@
+{
+  "name": "react-chat-app",
+  "version": "1.0.0",
+  "description": "Basic Real Time Chat App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "app"
+  ],
+  "author": "Somnang Tan",
+  "license": "ISC"
+}
