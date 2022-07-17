@@ -83,18 +83,19 @@
                             const selector = document.querySelectorAll(".messages");
                             selector[selector.length - 1].appendChild(dFlexDiv);
                             selector[selector.length - 1].appendChild(scrollDiv);
-
-                            const scrollToEnd = document.getElementsByClassName("scroll-end");
-                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-
+                            
                             const dFlex = document.getElementsByClassName("d-flex");
                             dFlex[dFlex.length - 1].appendChild(emptyDiv);
                             dFlex[dFlex.length - 1].appendChild(msgDiv);
                             dFlex[dFlex.length - 1].appendChild(img);
+
+                            const scrollToEnd = document.getElementsByClassName("scroll-end");
+                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
                         }
                         else{
                             if(msgDiv != undefined){
                                 dFlexDiv.className = "d-flex";
+                                scrollDiv.className = "scroll-end";
                                 msgDiv.className = "col-8 msgCtn2";
                                 emptyDiv.className = "col-2";
                                 img.src = "user-profile.svg";
@@ -106,11 +107,15 @@
 
                             const selector = document.querySelectorAll(".messages");
                             selector[selector.length - 1].appendChild(dFlexDiv);
+                            selector[selector.length - 1].appendChild(scrollDiv);
 
                             const dFlex = document.getElementsByClassName("d-flex")
                             dFlex[dFlex.length - 1].appendChild(img);
                             dFlex[dFlex.length - 1].appendChild(msgDiv);
                             dFlex[dFlex.length - 1].appendChild(emptyDiv);
+
+                            const scrollToEnd = document.getElementsByClassName("scroll-end");
+                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
                         }
                     };
                     reader.readAsText(message.data);
