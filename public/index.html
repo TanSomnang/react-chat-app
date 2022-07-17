@@ -33,6 +33,7 @@
         </div>
         <script type="text/javascript">
             const username = prompt("Please enter your username");
+            const uuid = new Date().valueOf();
             const name = document.getElementById("name");
             name.innerHTML += username;
 
@@ -57,7 +58,7 @@
                 if (message.data instanceof Blob) {
                     reader = new FileReader();
                     reader.onload = () => {
-                        if(JSON.parse(reader.result).username === username){
+                        if(JSON.parse(reader.result).uuid === uuid){
                             if(msgDiv != undefined){
                                 dFlexDiv.className = "d-flex";
                                 msgDiv.className = "col-8 msgCtn";
@@ -111,7 +112,7 @@
                 event.preventDefault();
                 const message = document.getElementById("inputBox").value;
                 if(message != ""){
-                    webSocket.send(JSON.stringify({message: message, username: username}));
+                    webSocket.send(JSON.stringify({message: message, username: username, uuid: uuid}));
                     document.getElementById("inputBox").value=""
                 }
             })
