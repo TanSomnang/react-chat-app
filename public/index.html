@@ -31,47 +31,76 @@
 
         const webSocket=new WebSocket(`ws://${window.document.location.host}`);
         webSocket.binaryType = "blob";
-
+        // Log socket opening and closing
         webSocket.addEventListener("open", event => {
             console.log("Websocket connection opened");
         });
-
         webSocket.addEventListener("close", event => {
             console.log("Websocket connection closed");
         });
-
         webSocket.onmessage = function(message){
-            const msgDiv=document.createElement('div');
+            
+            const dFlexDiv=document.createElement("div");
+            const msgDiv=document.createElement("div");
+            const emptyDiv=document.createElement("div");
             const img=document.createElement("img");
-
-            msgDiv.classList.add('msgCtn');
-            img.className = "col-2";
-            img.src = "user-profile.svg";
-            img.style.background = "rgb(9, 145, 191)";
-            img.className = "col-2 msgPic rounded-circle z-depth-2";
+            
             if (message.data instanceof Blob) {
                 reader = new FileReader();
                 reader.onload = () => {
-                    msgDiv.innerHTML = JSON.parse(reader.result).message;
-                    img.title = JSON.parse(reader.result).username;
-                    document.getElementById('messages').appendChild(msgDiv);
-                    document.getElementById('messages').appendChild(img);
+                    if(JSON.parse(reader.result).username === username){
+                        if(msgDiv != undefined){
+                            dFlexDiv.className = "d-flex";
+                            msgDiv.className = "col-8 mr-1";
+                            emptyDiv.className = "col-2";
+                            img.className = "col-2";
+                            img.src = "user-profile.svg";
+                            img.style.background = "rgb(9, 145, 191)";
+                            img.className = "col-2 rounded-circle z-depth-2";
+                        }
+                        msgDiv.innerHTML = JSON.parse(reader.result).message;
+                        img.title = JSON.parse(reader.result).username;
+                        const selector = document.querySelectorAll(".messages");
+                        selector[selector.length - 1].appendChild(dFlexDiv);
+                        const dFlex = document.getElementsByClassName("d-flex")
+                        dFlex[dFlex.length - 1].appendChild(emptyDiv);
+                        dFlex[dFlex.length - 1].appendChild(msgDiv);
+                        dFlex[dFlex.length - 1].appendChild(img);
+                    }
+                    else{
+                        if(msgDiv != undefined){
+                            dFlexDiv.className = "d-flex";
+                            msgDiv.className = "col-8 ml-1";
+                            emptyDiv.className = "col-2";
+                            img.className = "col-2";
+                            img.src = "user-profile.svg";
+                            img.style.background = "rgb(66, 66, 66)";
+                            img.className = "col-2 msgPic rounded-circle z-depth-2";
+                        }
+                        msgDiv.innerHTML = JSON.parse(reader.result).message;
+                        img.title = JSON.parse(reader.result).username;
+                        const selector = document.querySelectorAll(".messages");
+                        selector[selector.length - 1].appendChild(dFlexDiv);
+                        const dFlex = document.getElementsByClassName("d-flex")
+                        dFlex[dFlex.length - 1].appendChild(img);
+                        dFlex[dFlex.length - 1].appendChild(msgDiv);
+                        dFlex[dFlex.length - 1].appendChild(emptyDiv);
+                    }
                 };
                 reader.readAsText(message.data);
             } else {
                 console.log("Result2: " + message.data);
                 msgDiv.innerHTML = message.data;
-                document.getElementById('messages').appendChild(msgDiv);
+                document.getElementById("messages").appendChild(msgDiv);
             }
         }
 
-        const form=document.getElementById('msgForm');
-
-        form.addEventListener('submit',(event) => {
+        const form=document.getElementById("msgForm");
+        form.addEventListener("submit",(event) => {
             event.preventDefault();
-            const message=document.getElementById('inputBox').value;
+            const message=document.getElementById("inputBox").value;
             webSocket.send(JSON.stringify({message: message, username: username}));
-            document.getElementById('inputBox').value=''
+            document.getElementById("inputBox").value=""
         })
     </script>
 </html>
