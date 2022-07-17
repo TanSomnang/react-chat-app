@@ -69,6 +69,14 @@
                             }
                             msgDiv.innerHTML = JSON.parse(reader.result).message;
                             img.title = JSON.parse(reader.result).username;
+                            if(JSON.parse(localStorage.getItem("messages")) != null){
+                                const prevMsg = JSON.parse(localStorage.getItem("messages"));
+                                prevMsg.push({uuid: uuid, username: username, message: JSON.parse(reader.result).message});
+                                localStorage.setItem("messages", JSON.stringify(prevMsg));
+                            }
+                            else{
+                                localStorage.setItem("messages", JSON.stringify([{uuid: uuid, username: username, message: JSON.parse(reader.result).message}]));
+                            }
 
                             const selector = document.querySelectorAll(".messages");
                             selector[selector.length - 1].appendChild(dFlexDiv);
@@ -102,6 +110,7 @@
                     reader.readAsText(message.data);
                 } else {
                     console.log("Result2: " + message.data);
+                    localStorage.setItem("messages", JSON.stringify({uuid: uuid, username: username, message: message.data}));
                     msgDiv.innerHTML = message.data;
                     document.getElementById("messages").appendChild(msgDiv);
                 }
