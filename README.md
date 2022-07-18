@@ -7,6 +7,7 @@
 - Each new browser tab is a new chat user. The new messages in the chat room should be updated to all opened tabs ( live updating for all users ) without using socket.io all.
 - Implement functionality for sending messages to chat
 - Implement ScrollIntoView when send or receive new messages
+- Show username when hover over profile picture
 - Implement functionality for show message history, and load more messages when scroll chats to the top. (In Progress...)
 ## 3. Technologies and Dependencies
 - Technologies: React JS, Bootstrap
@@ -30,3 +31,5 @@
 ## 5. Running Application
 - We can try to run our application immediately. Just launch the server with the following command: `node index.js port` (i.e: `node index.js 3000`)
 - Then, open a couple of browser tabs or even two different browsers, point them at `http://localhost:port` (i.e: `http://localhost:3000`), and start chatting
+
+(/asset/1.png)
