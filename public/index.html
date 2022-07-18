@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <title>Real Time Chat App</title>
+    </head>
+    <body>
+        <div class="container"
+            style=" margin-top: 2rem;
+                    display: flex;
+                    flex-direction: column;
+                    width: 50%;
+                    height: 100vh;">
+            <div class="card" style="width: 40rem;">
+                <div class="card-title" style="background: #6c757d40" >
+                    <h5 class="ml-4 mt-4" id="name">Welcome: </h5>
+                    <hr/>
+                </div>
+                <div class="card-body pt-0">
+                    <div id="messages" class="messages"></div>
+                </div>
+                <div class="card-footer" style="background: #6c757d40">
+                    <form id="msgForm" class="msgForm">
+                        <input type="text" autofocus placeholder="Message" class="col-8 input form-control" id="inputBox"/>
+                        <input type="submit" class="col-3 ml-5 btn btn-primary form-control" value="Send">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            const username = prompt("Please enter your username");
+            const uuid = new Date().valueOf();
+            const name = document.getElementById("name");
+            name.innerHTML += username;
+
+            const webSocket=new WebSocket(`ws://${window.document.location.host}`);
+            webSocket.binaryType = "blob";
+
+            webSocket.addEventListener("open", event => {
+                console.log("Websocket connection opened");
+            });
+
+            webSocket.addEventListener("close", event => {
+                console.log("Websocket connection closed");
+            });
+
+            webSocket.onmessage = function(message){
+
+                const dFlexDiv = document.createElement("div");
+                const msgDiv = document.createElement("div");
+                const emptyDiv = document.createElement("div");
+                const scrollDiv = document.createElement("div");
+                const img = document.createElement("img");
+
+                if (message.data instanceof Blob) {
+                    reader = new FileReader();
+                    reader.onload = () => {
+                        if(JSON.parse(reader.result).uuid === uuid){
+                            if(msgDiv != undefined){
+                                dFlexDiv.className = "d-flex";
+                                scrollDiv.className = "scroll-end";
+                                msgDiv.className = "col-8 msgCtn";
+                                emptyDiv.className = "col-2";
+                                img.src = "user-profile.svg";
+                                img.style.background = "rgb(9, 145, 191)";
+                                img.className = "col-2 msgPic rounded-circle z-depth-2";
+                            }
+                            msgDiv.innerHTML = JSON.parse(reader.result).message;
+                            img.title = JSON.parse(reader.result).username;
+                            if(JSON.parse(localStorage.getItem("messages")) != null){
+                                const prevMsg = JSON.parse(localStorage.getItem("messages"));
+                                prevMsg.push({uuid: uuid, username: username, message: JSON.parse(reader.result).message});
+                                localStorage.setItem("messages", JSON.stringify(prevMsg));
+                            }
+                            else{
+                                localStorage.setItem("messages", JSON.stringify([{uuid: uuid, username: username, message: JSON.parse(reader.result).message}]));
+                            }
+
+                            const selector = document.querySelectorAll(".messages");
+                            selector[selector.length - 1].appendChild(dFlexDiv);
+                            selector[selector.length - 1].appendChild(scrollDiv);
+                            
+                            const dFlex = document.getElementsByClassName("d-flex");
+                            dFlex[dFlex.length - 1].appendChild(emptyDiv);
+                            dFlex[dFlex.length - 1].appendChild(msgDiv);
+                            dFlex[dFlex.length - 1].appendChild(img);
+
+                            const scrollToEnd = document.getElementsByClassName("scroll-end");
+                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+                        }
+                        else{
+                            if(msgDiv != undefined){
+                                dFlexDiv.className = "d-flex";
+                                scrollDiv.className = "scroll-end";
+                                msgDiv.className = "col-8 msgCtn2";
+                                emptyDiv.className = "col-2";
+                                img.src = "user-profile.svg";
+                                img.style.background = "rgb(66, 66, 66)";
+                                img.className = "col-2 msgPic rounded-circle z-depth-2";
+                            }
+                            msgDiv.innerHTML = JSON.parse(reader.result).message;
+                            img.title = JSON.parse(reader.result).username;
+
+                            const selector = document.querySelectorAll(".messages");
+                            selector[selector.length - 1].appendChild(dFlexDiv);
+                            selector[selector.length - 1].appendChild(scrollDiv);
+
+                            const dFlex = document.getElementsByClassName("d-flex")
+                            dFlex[dFlex.length - 1].appendChild(img);
+                            dFlex[dFlex.length - 1].appendChild(msgDiv);
+                            dFlex[dFlex.length - 1].appendChild(emptyDiv);
+
+                            const scrollToEnd = document.getElementsByClassName("scroll-end");
+                            scrollToEnd[scrollToEnd.length - 1].scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+                        }
+                    };
+                    reader.readAsText(message.data);
+                } else {
+                    console.log("Result2: " + message.data);
+                    localStorage.setItem("messages", JSON.stringify({uuid: uuid, username: username, message: message.data}));
+                    msgDiv.innerHTML = message.data;
+                    document.getElementById("messages").appendChild(msgDiv);
+                }
+            }
+
+            const form = document.getElementById("msgForm");
+            form.addEventListener("submit",(event) => {
+                event.preventDefault();
+                const message = document.getElementById("inputBox").value;
+                if(message != ""){
+                    webSocket.send(JSON.stringify({message: message, username: username, uuid: uuid}));
+                    document.getElementById("inputBox").value=""
+                }
+            })
+        </script>
+    </body>
+</html>

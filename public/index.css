@@ -1,0 +1,37 @@
+body{
+    overflow: hidden;
+}
+.messages{
+    height: 60vh;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.msg{
+    color:rgb(9, 145, 191);;
+    font-size: 2rem;
+}
+.msgCtn{
+    margin: 1rem 0;
+    color: white;
+    padding: 1rem 1rem;
+    background-color: rgb(9, 145, 191);
+    border-radius: 6px;
+    font-size: 1rem
+}
+.msgCtn2{
+    margin: 1rem 0;
+    color: white;
+    padding: 1rem 1rem;
+    background-color: rgb(66, 66, 66);
+    border-radius: 6px;
+    font-size: 1rem
+}
+.msgPic{
+    margin: 1rem 0;
+    padding: 1rem 1rem;
+}
+.msgForm{
+    display:flex;
+    flex-direction:row;
+}
