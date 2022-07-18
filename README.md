@@ -31,5 +31,10 @@
 ## 5. Running Application
 - We can try to run our application immediately. Just launch the server with the following command: `node index.js port` (i.e: `node index.js 3000`)
 - Then, open a couple of browser tabs or even two different browsers, point them at `http://localhost:port` (i.e: `http://localhost:3000`), and start chatting
-
-(/asset/1.png)
+- **NOTE:** You can see username when hover over profile picture
+![](assets/1.PNG)
+![](assets/2.PNG)
+![](assets/3.PNG)
+![](assets/4.PNG)
+![](assets/5.PNG)
+![](assets/6.PNG)
